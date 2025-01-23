@@ -27,42 +27,42 @@ WAIT_GPIO() {
 init() {
     echo "Initializing GPIOs..."
     # Set GPIOs as output and initialize them to low
-    gpiodctl set-direction "$CHIP" "$SX1302_RESET_PIN" out
-    gpiodctl set-direction "$CHIP" "$SX1302_POWER_EN_PIN" out
-    gpiodctl set-direction "$CHIP" "$SX1261_RESET_PIN" out
-    gpiodctl set-direction "$CHIP" "$AD5338R_RESET_PIN" out
+    gpioset set-direction "$CHIP" "$SX1302_RESET_PIN" out
+    gpioset set-direction "$CHIP" "$SX1302_POWER_EN_PIN" out
+    gpioset set-direction "$CHIP" "$SX1261_RESET_PIN" out
+    gpioset set-direction "$CHIP" "$AD5338R_RESET_PIN" out
 
-    gpiodctl set-value "$CHIP" "$SX1302_RESET_PIN" 0
-    gpiodctl set-value "$CHIP" "$SX1302_POWER_EN_PIN" 0
-    gpiodctl set-value "$CHIP" "$SX1261_RESET_PIN" 0
-    gpiodctl set-value "$CHIP" "$AD5338R_RESET_PIN" 0
+    gpioset set-value "$CHIP" "$SX1302_RESET_PIN" 0
+    gpioset set-value "$CHIP" "$SX1302_POWER_EN_PIN" 0
+    gpioset set-value "$CHIP" "$SX1261_RESET_PIN" 0
+    gpioset set-value "$CHIP" "$AD5338R_RESET_PIN" 0
 }
 
 reset() {
     echo "Performing reset sequence..."
     # Power enable
-    gpiodctl set-value "$CHIP" "$SX1302_POWER_EN_PIN" 1; WAIT_GPIO
+    gpioset set-value "$CHIP" "$SX1302_POWER_EN_PIN" 1; WAIT_GPIO
 
     # Reset SX1302
-    gpiodctl set-value "$CHIP" "$SX1302_RESET_PIN" 1; WAIT_GPIO
-    gpiodctl set-value "$CHIP" "$SX1302_RESET_PIN" 0; WAIT_GPIO
+    gpioset set-value "$CHIP" "$SX1302_RESET_PIN" 1; WAIT_GPIO
+    gpioset set-value "$CHIP" "$SX1302_RESET_PIN" 0; WAIT_GPIO
 
     # Reset SX1261
-    gpiodctl set-value "$CHIP" "$SX1261_RESET_PIN" 0; WAIT_GPIO
-    gpiodctl set-value "$CHIP" "$SX1261_RESET_PIN" 1; WAIT_GPIO
+    gpioset set-value "$CHIP" "$SX1261_RESET_PIN" 0; WAIT_GPIO
+    gpioset set-value "$CHIP" "$SX1261_RESET_PIN" 1; WAIT_GPIO
 
     # Reset AD5338R
-    gpiodctl set-value "$CHIP" "$AD5338R_RESET_PIN" 0; WAIT_GPIO
-    gpiodctl set-value "$CHIP" "$AD5338R_RESET_PIN" 1; WAIT_GPIO
+    gpioset set-value "$CHIP" "$AD5338R_RESET_PIN" 0; WAIT_GPIO
+    gpioset set-value "$CHIP" "$AD5338R_RESET_PIN" 1; WAIT_GPIO
 }
 
 term() {
     echo "Cleaning up GPIOs..."
     # Reset all GPIOs to input (safe state)
-    gpiodctl set-direction "$CHIP" "$SX1302_RESET_PIN" in
-    gpiodctl set-direction "$CHIP" "$SX1302_POWER_EN_PIN" in
-    gpiodctl set-direction "$CHIP" "$SX1261_RESET_PIN" in
-    gpiodctl set-direction "$CHIP" "$AD5338R_RESET_PIN" in
+    gpioset set-direction "$CHIP" "$SX1302_RESET_PIN" in
+    gpioset set-direction "$CHIP" "$SX1302_POWER_EN_PIN" in
+    gpioset set-direction "$CHIP" "$SX1261_RESET_PIN" in
+    gpioset set-direction "$CHIP" "$AD5338R_RESET_PIN" in
 }
 
 case "$1" in
