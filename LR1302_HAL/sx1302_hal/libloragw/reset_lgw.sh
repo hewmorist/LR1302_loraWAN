@@ -13,6 +13,7 @@
 # GPIO mapping has to be adapted with HW
 #
 
+# GPIO mapping
 SX1302_RESET_PIN=17     # SX1302 reset
 SX1302_POWER_EN_PIN=18  # SX1302 power enable
 SX1261_RESET_PIN=5      # SX1261 reset (LBT / Spectral Scan)
@@ -26,43 +27,32 @@ WAIT_GPIO() {
 
 init() {
     echo "Initializing GPIOs..."
-    # Set GPIOs as output and initialize them to low
-    gpioset set-direction "$CHIP" "$SX1302_RESET_PIN" out
-    gpioset set-direction "$CHIP" "$SX1302_POWER_EN_PIN" out
-    gpioset set-direction "$CHIP" "$SX1261_RESET_PIN" out
-    gpioset set-direction "$CHIP" "$AD5338R_RESET_PIN" out
-
-    gpioset set-value "$CHIP" "$SX1302_RESET_PIN" 0
-    gpioset set-value "$CHIP" "$SX1302_POWER_EN_PIN" 0
-    gpioset set-value "$CHIP" "$SX1261_RESET_PIN" 0
-    gpioset set-value "$CHIP" "$AD5338R_RESET_PIN" 0
+    gpioset "$CHIP" "$SX1302_RESET_PIN"=0
+    gpioset "$CHIP" "$SX1302_POWER_EN_PIN"=0
+    gpioset "$CHIP" "$SX1261_RESET_PIN"=0
+    gpioset "$CHIP" "$AD5338R_RESET_PIN"=0
 }
 
 reset() {
     echo "Performing reset sequence..."
-    # Power enable
-    gpioset set-value "$CHIP" "$SX1302_POWER_EN_PIN" 1; WAIT_GPIO
+    gpioset "$CHIP" "$SX1302_POWER_EN_PIN"=1; WAIT_GPIO
 
-    # Reset SX1302
-    gpioset set-value "$CHIP" "$SX1302_RESET_PIN" 1; WAIT_GPIO
-    gpioset set-value "$CHIP" "$SX1302_RESET_PIN" 0; WAIT_GPIO
+    gpioset "$CHIP" "$SX1302_RESET_PIN"=1; WAIT_GPIO
+    gpioset "$CHIP" "$SX1302_RESET_PIN"=0; WAIT_GPIO
 
-    # Reset SX1261
-    gpioset set-value "$CHIP" "$SX1261_RESET_PIN" 0; WAIT_GPIO
-    gpioset set-value "$CHIP" "$SX1261_RESET_PIN" 1; WAIT_GPIO
+    gpioset "$CHIP" "$SX1261_RESET_PIN"=0; WAIT_GPIO
+    gpioset "$CHIP" "$SX1261_RESET_PIN"=1; WAIT_GPIO
 
-    # Reset AD5338R
-    gpioset set-value "$CHIP" "$AD5338R_RESET_PIN" 0; WAIT_GPIO
-    gpioset set-value "$CHIP" "$AD5338R_RESET_PIN" 1; WAIT_GPIO
+    gpioset "$CHIP" "$AD5338R_RESET_PIN"=0; WAIT_GPIO
+    gpioset "$CHIP" "$AD5338R_RESET_PIN"=1; WAIT_GPIO
 }
 
 term() {
     echo "Cleaning up GPIOs..."
-    # Reset all GPIOs to input (safe state)
-    gpioset set-direction "$CHIP" "$SX1302_RESET_PIN" in
-    gpioset set-direction "$CHIP" "$SX1302_POWER_EN_PIN" in
-    gpioset set-direction "$CHIP" "$SX1261_RESET_PIN" in
-    gpioset set-direction "$CHIP" "$AD5338R_RESET_PIN" in
+    gpioset "$CHIP" "$SX1302_RESET_PIN"=0
+    gpioset "$CHIP" "$SX1302_POWER_EN_PIN"=0
+    gpioset "$CHIP" "$SX1261_RESET_PIN"=0
+    gpioset "$CHIP" "$AD5338R_RESET_PIN"=0
 }
 
 case "$1" in
